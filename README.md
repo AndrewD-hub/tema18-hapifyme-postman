@@ -19,8 +19,5 @@ Acest repository conține tema pentru automatizarea unui flux de utilizator în 
 Variabila principală folosită:
 
 ```text
-baseUrl = https://test.hapifyme.com/api
+baseUrl = https://apps.qualiadept.eu/hapifyme/api
 
-Observație
-
-La momentul testării, endpoint-ul https://test.hapifyme.com nu a fost accesibil și a returnat eroarea DNS_PROBE_FINISHED_NXDOMAIN. Colecția și environment-ul sunt configurate conform cerinței temei.

@@ -149,9 +149,69 @@
     },
     {
       "name": "03 - Get Profile",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Get profile status is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Profile response is success\", function () {\r",
+              "    pm.expect(jsonData.status).to.eql(\"success\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Profile email matches generated email\", function () {\r",
+              "    pm.expect(jsonData.user.email).to.eql(pm.environment.get(\"generatedEmail\"));\r",
+              "});\r",
+              "\r",
+              "console.log(\"Profile response:\", jsonData);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
       "request": {
         "method": "GET",
-        "header": []
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/user/get_profile.php?user_id={{user_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "get_profile.php"
+          ],
+          "query": [
+            {
+              "key": "user_id",
+              "value": "{{user_id}}"
+            }
+          ]
+        }
       },
       "response": []
     },
