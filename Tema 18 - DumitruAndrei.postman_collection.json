@@ -1,0 +1,204 @@
+{
+  "info": {
+    "_postman_id": "3495bdf6-6a65-41c2-b99a-c3e9be6755bb",
+    "name": "Tema 18 - DumitruAndrei",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55039699",
+    "_collection_link": "https://go.postman.co/collection/55039699-3495bdf6-6a65-41c2-b99a-c3e9be6755bb?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 - Register User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Register status is 201 or 200\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "",
+              "const jsonData = pm.response.json();",
+              "",
+              "if (jsonData.api_key) {",
+              "    pm.environment.set(\"api_key\", jsonData.api_key);",
+              "}",
+              "",
+              "if (jsonData.user_id) {",
+              "    pm.environment.set(\"user_id\", jsonData.user_id);",
+              "}",
+              "",
+              "if (jsonData.username) {",
+              "    pm.environment.set(\"username\", jsonData.username);",
+              "} else {",
+              "    pm.environment.set(\"username\", pm.environment.get(\"generatedEmail\"));",
+              "}",
+              "",
+              "console.log(\"Register response:\", jsonData);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = Date.now();\r",
+              "\r",
+              "const email = `test_user_${timestamp}@mail.com`;\r",
+              "const password = \"Password123!\";\r",
+              "\r",
+              "pm.environment.set(\"generatedEmail\", email);\r",
+              "pm.environment.set(\"password\", password);\r",
+              "\r",
+              "console.log(\"Generated email:\", email);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"first_name\": \"Test\",\r\n  \"last_name\": \"User\",\r\n  \"email\": \"{{generatedEmail}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/user/register.php",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "register.php"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    },
+    {
+      "name": "02 - Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Login status is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const jsonData = pm.response.json();",
+              "",
+              "pm.test(\"Login response contains token\", function () {",
+              "    pm.expect(jsonData.token).to.exist;",
+              "});",
+              "",
+              "if (jsonData.token) {",
+              "    pm.environment.set(\"token\", jsonData.token);",
+              "}",
+              "",
+              "if (jsonData.user_id) {",
+              "    pm.environment.set(\"user_id\", jsonData.user_id);",
+              "}",
+              "",
+              "console.log(\"Login response:\", jsonData);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/user/login.php",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "login.php"
+          ]
+        },
+        "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+      },
+      "response": []
+    },
+    {
+      "name": "03 - Get Profile",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "04 - Delete Profile",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Delete profile status is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "console.log(\"Delete response:\", pm.response.text());"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/user/delete_profile.php",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "user",
+            "delete_profile.php"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
